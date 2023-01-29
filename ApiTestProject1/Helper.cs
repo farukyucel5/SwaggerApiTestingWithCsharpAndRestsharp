@@ -30,18 +30,17 @@ namespace ApiTestProject1
 
         }
 
-        public RestRequest CreatePostRequest<T>(T feature)
+        public RestRequest CreateDeleteRequest()
         {
             request = new RestRequest()
             {
-                Method = Method.Post
+                Method = Method.Delete
             };
-            request.AddHeader("accept","application/json");
-            request.AddHeader("Content-Type","application/json");
-            request.AddBody(feature);
-            request.RequestFormat=DataFormat.Json;
+            request.AddHeader("accept", "application/json");
             return request;
+
         }
+
 
         public RestResponse GetResponse(RestClient restClient,RestRequest restRequest)
         {

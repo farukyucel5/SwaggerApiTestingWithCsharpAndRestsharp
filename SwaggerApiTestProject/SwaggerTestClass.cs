@@ -49,7 +49,7 @@ namespace SwaggerApiTestProject
         }
 
         [Test]
-        public void PositivepUpdateAPetTest()
+        public void PositiveUpdateAPetTest()
         {
 
             string apiUrl = "https://petstore.swagger.io/v2/pet";
@@ -70,9 +70,7 @@ namespace SwaggerApiTestProject
             RestResponse response = client.Execute(request);
             Assert.IsTrue(response.IsSuccessful);
 
-
-
-        }
+         }
 
 
 
@@ -86,9 +84,9 @@ namespace SwaggerApiTestProject
                 {
                     RequestUri = new Uri("https://petstore.swagger.io/v2/user/createWithList"),
                     Method = HttpMethod.Post,
-                    Content = new StringContent("[\r\n  {\r\n    \"id\": \"123\",\r\n   " +
+                    Content = new StringContent("[\r\n  {\r\n    \"id\": 123,\r\n   " +
                     " \"username\": \"JohnTony51\",\r\n    " +
-                    "\"firstName\": \"Robot\",\r\n    \"lastName\": \"tony\",\r\n  " +
+                    "\"firstName\": 12,\r\n    \"lastName\": \"tony\",\r\n  " +
                     "  \"email\": \"d@gmail.com\",\r\n    " +
                     "\"password\": \"string\",\r\n    \"phone\": \"123456789\",\r\n   " +
                     " \"userStatus\": 0\r\n  }\r\n]"
@@ -97,9 +95,9 @@ namespace SwaggerApiTestProject
                 var response = client.SendAsync(request).Result;
                 var responseString = response.Content.ReadAsStringAsync().Result;
                 
-                //I have not been able to post with string id value but I could 
-                //it created a post request with a string id value
-                //I expected to get codes like 400 vs but I got 200
+                //I should not have been able to post with integer firstname value but I could
+                //it is supposed not to make a post request with an integer firstname 
+                //because firstname is expected as a string in the api document. 
            
 
                 Assert.False(responseString.Contains("200"));
@@ -107,14 +105,74 @@ namespace SwaggerApiTestProject
         }
 
         [Test]
-        public void NegativeGetUserTest()
+        public void VerifyTheNegativePostUserTest()
         {
+
             var api = new Swagger();
             var response = api.GetUserItems();
-            Assert.AreEqual(123, response.id);
+            Assert.IsTrue(response.firstName.Equals("12"));
+        }
+
+
+
+        [Test]
+        public void NegativePostStoreTest()
+        {
+            /*
+             * -2147483647<integer<2147483647
+             */
+            /* Even if the id value specified is greater than the upper limit of the integer data type,
+            
+            the post request is created by the api.
+             */
+
+            string apiUrl = "https://petstore.swagger.io/v2/pet";
+            string jsonString = "{\r\n  \"id\": 214748364711232,\r\n  \"petId\": 156,\r\n " +
+                " \"quantity\": 12,\r\n  \"shipDate\": \"2023-01-29T10:56:56.090Z\",\r\n " +
+                " \"status\": \"placed\",\r\n  \"complete\": false\r\n}";
+
+            var client = new RestClient(apiUrl);
+            var request = new RestRequest()
+            {
+                Method = Method.Post
+            };
+            request.AddHeader("content-type", "application/json");
+            request.AddHeader("accept", "application/json");
+            request.AddJsonBody(jsonString);
+
+            RestResponse response = client.Execute(request);
+            Assert.IsFalse(response.IsSuccessful);
+      }
+
+
+
+       [Test]
+        public void positiveDeleteStore()
+        {
+            var api = new Swagger();
+            var response = api.GettingStore();
+            if (response.IsSuccessful)
+            {
+                var getResponse = api.DeletingStore();
+                Assert.IsTrue(getResponse.IsSuccessful);
+            }else
+            {
+                Assert.IsFalse(response.IsSuccessful);
+                Console.WriteLine("The store is already not available");
+
+            }
+            
+
+            
+
+
+        }
+
+            
+            
+            
         }
     }
 
 
 
-    }
