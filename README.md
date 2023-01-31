@@ -8,6 +8,6 @@ some usefull methods used for the get requests.
 
 *SwaggerApiTestProject only includes the SwaggerTestClass,which I made all the api test methods 
 
-2.To be able to integrate these two projects with each other, I added the ApiTestProject as a project refrence for  SwaggerApiTestProject.
+2.To be able to integrate these two projects with each other, I added the ApiTestProject as a project reference for  SwaggerApiTestProject.
 
 *if you would like to run the tests, kindly open the SwaggerTestClass in SwaggerApiTestProject.
